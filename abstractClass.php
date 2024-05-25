@@ -3,22 +3,48 @@
 abstract class base{
     public $name;
 
-    // protected function __construct($n)
-    // {
-    //     $this->name = $n;
-    // }
+    public function __construct($n)
+    {
+        $this->name = $n;
+    }
 
-    abstract protected function show($a);
+    abstract protected function show();
 }
 
 class derived extends base{
-    public function show($a){
-        echo "hello";
+    public function show(){
+        // echo $a;
+        echo $this->name;
     }
 }
 
-$a = new derived();
 
-$a->show('zafar');
+$a = new derived("zafar");
+$a->show();
+
+// second example
+
+abstract class base1{
+    public $name;
+
+    public function __construct($n)
+    {
+        $this->name = $n;
+    }
+
+    abstract protected function show1($n);
+}
+
+class derived1 extends base1{
+    public function show1($a){
+        // echo $a;
+        echo $a;
+    }
+}
+
+// $a = new derived("zafar");
+// $a->show();
+$a = new derived1("zafar");
+$a->show1("Hello" . $a->name);
 
 ?>
