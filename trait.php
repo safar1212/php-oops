@@ -63,4 +63,24 @@ $test22->Hi();
 echo "<br>";
 $test22->HiFromSayHiTrait();
 
+echo "<br>";
+echo "<br>";
+
+// next example
+
+trait showFromPrivate{
+  private  function showMe(){
+        echo "Hi this is answer from a private function";
+    }
+}
+
+class showFromPrivateClass {
+    use showFromPrivate{
+      showFromPrivate::showMe as public;
+    }
+}
+
+$aaa = new showFromPrivateClass();
+$aaa->showMe();
+
 ?>
