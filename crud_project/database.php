@@ -8,7 +8,6 @@ class dataBase{
     private $mysqli = "";
     private $result = array();
 
-
     public function __construct()
     {
         if (!$this->conn) {
@@ -23,17 +22,100 @@ class dataBase{
         }
     }
 
-    public function insert(){
-
+    public function insert($table, $parameter=array()){
+         if($this->tableExists($table)){
+            // print_r($parameter);
+            $tableColumns = implode(',', array_keys($parameter));
+            $tableValue = implode("', '", $parameter);
+            $sql = "INSERT INTO $table ($tableColumns) VALUE ('$tableValue')";
+           if($this->mysqli->query($sql)){
+            array_push($this->result, $this->mysqli->insert_id);
+            return true;
+           } else {
+            array_push($this->result, $this->mysqli->error);
+            return false;
+           }
+         } else {
+            return false;
+         }
     }
-    public function delete(){
+    public function delete($table, $where = null){
+       if($this->tableExists($table)){
+        $sql = "Delete FROM $table";
+        if($where != null){
+            $sql .= " WHERE $where";
+        }
+        print_r($table);
 
+        if($this->mysqli->query($sql)){
+            array_push($this->result, $this->mysqli->affected_rows);
+            // return true;
+        } else{
+            array_push($this->result, $this->mysqli->error);
+
+            return false;
+        }
+
+       } else {
+        return false;
+       }
     }
-    public function update(){
-        
+    public function update($table, $parameter=array(), $where = null){
+        if($this->tableExists($table)){
+        //   print_r($parameter);
+        $arguments = array();
+        foreach($parameter as $key => $value){
+            $arguments[] = "$key = '$value'";
+        }
+        // print_r($arguments);
+        $sql = "UPDATE $table SET " . implode(', ', $arguments); 
+        if($where != null){
+            $sql .= " WHERE $where";
+        }
+
+        if($this->mysqli->query($sql)){
+            array_push($this->result, $this->mysqli->affected_rows);
+            // return true;
+        } else{
+            array_push($this->result, $this->mysqli->error);
+
+            return false;
+        }
+
+        } else{
+            return false;
+        }
     }
     public function select(){
 
+    }
+    public function sql($sql){
+        $query = $this->mysqli->query(($sql));
+
+        if($query){
+            $this->result = $query->fetch_all(MYSQLI_ASSOC);
+            return true;
+        } else {
+           array_push($this->result, $this->mysqli->error);
+           return false;
+        }
+    }
+    private function tableExists($table){
+       $sql = "SHOW TABLES FROM $this->db_name LIKE '$table'";
+       $tableInDb = $this->mysqli->query($sql);
+       if($tableInDb){
+          if($tableInDb->num_rows == 1){
+            return true;
+          }
+       } else {
+        array_push($this->result, $table . "table doesn't exist in the database");
+        return false;
+       }
+    }
+    public function getResult(){
+        $val = $this->result;
+        $this->result = array();
+        return $val;
     }
     public function __destruct()
     {
