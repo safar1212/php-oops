@@ -14,10 +14,17 @@ $obj = new database();
 // $obj->sql('SELECT * FROM students WHERE student_name LIKE "%Rimsha%"');
 // echo "SQL result is : ";
 // print_r($obj->getResult());
-// $obj->select('students', '*',null,null,'id DESC',null);
-// echo "<br>";
-// echo " SQL result is : ";
-// print_r($obj->getResult());
+$columnName = "students.id,students.student_name,citydb.cname";
+$join = "citydb ON students.cid = citydb.cid";
+$obj->select('students',$columnName,$join,null,null,2);
+echo "<br>";
+echo " SQL result is : ";
+print_r($obj->getResult());
+
+echo "<br>";
+echo "<br>";
+
+$obj->pagination('students',$join,null,2);
 
 echo "<br>";
 echo "<br>";
