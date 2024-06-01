@@ -11,8 +11,14 @@ $obj = new database();
 // $obj->delete('students', 'id="9"');
 // echo "The following data is updated in : ";
 // print_r($obj->getResult());
-$obj->sql('SELECT * FROM students WHERE student_name LIKE "zafar"');
-echo "SQL result is : ";
-print_r($obj->getResult());
+// $obj->sql('SELECT * FROM students WHERE student_name LIKE "%Rimsha%"');
+// echo "SQL result is : ";
+// print_r($obj->getResult());
+// $obj->select('students', '*',null,null,'id DESC',null);
+// echo "<br>";
+// echo " SQL result is : ";
+// print_r($obj->getResult());
 
+echo "<br>";
+echo "<br>";
 ?>
